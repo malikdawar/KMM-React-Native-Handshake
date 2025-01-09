@@ -82,9 +82,9 @@ This repository provides a step-by-step guide to integrating Kotlin Multiplatfor
    - Create `KMPPackage.kt`:
      ```kotlin
      
-     class KMPPackage : ReactPackage {
+     class KMPPackage: ReactPackage {
         override fun createNativeModules(reactContext: ReactApplicationContext): List<NativeModule> {
-             val modules = ArrayList<NativeModule>()
+              val modules = ArrayList<NativeModule>()
               modules.add(KMPBridgeModule(reactContext))
               return modules
         }
@@ -146,13 +146,12 @@ This repository provides a step-by-step guide to integrating Kotlin Multiplatfor
        
      ```
 
-Now set the KMP Path inside the pods of React native IOS 
+### Now set the KMP Path inside the pods of React native IOS 
+<img width="950" alt="Screenshot 2025-01-09 at 11 27 30 AM" src="https://github.com/user-attachments/assets/46b65006-fd31-4a95-86fb-1d93e6d168f2" />
 
-<img width="835" alt="Screenshot 2025-01-09 at 10 21 44 AM" src="https://github.com/user-attachments/assets/45449b90-54ab-4094-a6fb-7e6322b43b8e" />
 
-Then install the cocoapods dependency inside the KMP module and set the paths accordinly 
-
-<img width="713" alt="Screenshot 2025-01-09 at 10 22 14 AM" src="https://github.com/user-attachments/assets/37c853e7-ddce-47b4-8fac-8bb7876f148d" />
+### Then install the cocoa pods dependency inside the KMP module and set the paths accordingly 
+<img width="902" alt="Screenshot 2025-01-09 at 11 28 42 AM" src="https://github.com/user-attachments/assets/73a396a0-8ae7-4fe1-a8f1-18efed9e7e2e" />
 
 ---
 
@@ -160,7 +159,7 @@ Then install the cocoapods dependency inside the KMP module and set the paths ac
 
 1. **Clone the repository**:
    ```sh
-   git clone https://github.com/malikdawar/KMP-ReactNative-Handshake.git
+   git clone https://github.com/malikdawar/KMM-React-Native-Handshake.git
    ```
 
 2. **Open the project in Visual Studio code**:
@@ -168,14 +167,14 @@ Then install the cocoapods dependency inside the KMP module and set the paths ac
    - Click on `File` -> `Open` and navigate to the cloned repository.
 
 3. **Build and Run**:
-   - Open terminal by pressing (Control + `)
+   - Open the terminal by pressing (Control + `)
    - Go to the project directory cd path to the project folder
-   - To run andorid app write the command npm run android
-   - To run IOS app write the command npm run ios
+   - To run android app write the command npm run android
+   - To run the IOS app write the command npm run ios
 
 ### Usage
 
-- There are Screens in this tiny project. 1st screen(Into) is develop in React native
+- There are Screens in this tiny project. 1st screen(Into) is developed in React Native
 - The second screen(Login) is developed in KMP
 
 ## License
