@@ -177,6 +177,201 @@ This repository provides a step-by-step guide to integrating Kotlin Multiplatfor
 - There are Screens in this tiny project. 1st screen(Into) is developed in React Native
 - The second screen(Login) is developed in KMP
 
+### next: Compose preview inside react native app
+
+To show a Kotlin Compose-based view inside a React Native app, you need to bridge the two frameworks. This can be achieved by using React Native's native module system to integrate the Compose view into the React Native app. Below is a step-by-step guide:
+
+---
+
+### 1. **Set Up Your React Native Project**
+Ensure you have a React Native project set up. If you don't have one, create it using:
+
+```bash
+npx react-native init MyReactNativeApp
+```
+
+---
+
+### 2. **Set Up Kotlin Compose in Android**
+If you don't already have a Kotlin Compose view, create one in your Android project.
+
+#### a. Add Compose Dependencies
+In your `android/app/build.gradle` file, add the necessary Compose dependencies:
+
+```gradle
+android {
+    ...
+    buildFeatures {
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion '1.5.3' // Use the latest version
+    }
+}
+
+dependencies {
+    ...
+    implementation "androidx.compose.ui:ui:1.5.3"
+    implementation "androidx.compose.material:material:1.5.3"
+    implementation "androidx.compose.ui:ui-tooling-preview:1.5.3"
+    implementation "androidx.activity:activity-compose:1.7.2"
+}
+```
+
+#### b. Create a Compose View
+Create a simple Compose view in your Android project. For example, create a file `MyComposeView.kt`:
+
+```kotlin
+package com.myreactnativeapp
+
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import com.myreactnativeapp.ui.theme.MyReactNativeAppTheme
+
+class MyComposeActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            MyReactNativeAppTheme {
+                Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
+                    Greeting("Hello from Compose!")
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun Greeting(name: String) {
+    Text(text = "Hello $name!")
+}
+
+@Preview(showBackground = true)
+@Composable
+fun DefaultPreview() {
+    MyReactNativeAppTheme {
+        Greeting("Android")
+    }
+}
+```
+
+---
+
+### 3. **Create a Native Module for React Native**
+To expose the Compose view to React Native, create a native module.
+
+#### a. Create a Native Module
+Create a new Kotlin class, e.g., `ComposeViewModule.kt`:
+
+```kotlin
+package com.myreactnativeapp
+
+import android.content.Intent
+import com.facebook.react.bridge.ReactApplicationContext
+import com.facebook.react.bridge.ReactContextBaseJavaModule
+import com.facebook.react.bridge.ReactMethod
+
+class ComposeViewModule(private val reactContext: ReactApplicationContext) : ReactContextBaseJavaModule() {
+
+    override fun getName(): String {
+        return "ComposeViewModule"
+    }
+
+    @ReactMethod
+    fun showComposeView() {
+        val intent = Intent(reactContext, MyComposeActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        reactContext.startActivity(intent)
+    }
+}
+```
+
+#### b. Register the Module
+Create a package for the module, e.g., `ComposeViewPackage.kt`:
+
+```kotlin
+package com.myreactnativeapp
+
+import com.facebook.react.ReactPackage
+import com.facebook.react.bridge.NativeModule
+import com.facebook.react.bridge.ReactApplicationContext
+import com.facebook.react.uimanager.ViewManager
+
+class ComposeViewPackage : ReactPackage {
+    override fun createNativeModules(reactContext: ReactApplicationContext): List<NativeModule> {
+        return listOf(ComposeViewModule(reactContext))
+    }
+
+    override fun createViewManagers(reactContext: ReactApplicationContext): List<ViewManager<*, *>> {
+        return emptyList()
+    }
+}
+```
+
+#### c. Add the Package to `MainApplication.java`
+Register the package in your `MainApplication.java`:
+
+```java
+import com.myreactnativeapp.ComposeViewPackage; // Import your package
+
+@Override
+protected List<ReactPackage> getPackages() {
+    return Arrays.<ReactPackage>asList(
+        new MainReactPackage(),
+        new ComposeViewPackage() // Add your package here
+    );
+}
+```
+
+---
+
+### 4. **Call the Native Module from React Native**
+In your React Native JavaScript code, call the native module to show the Compose view.
+
+```javascript
+import { NativeModules, Button } from 'react-native';
+
+const { ComposeViewModule } = NativeModules;
+
+const App = () => {
+  return (
+    <Button
+      title="Show Compose View"
+      onPress={() => ComposeViewModule.showComposeView()}
+    />
+  );
+};
+
+export default App;
+```
+
+---
+
+### 5. **Run the App**
+Run your React Native app:
+
+```bash
+npx react-native run-android
+```
+
+When you press the button, the Kotlin Compose view should open as a new activity.
+
+---
+
+### Notes:
+- This example opens the Compose view as a new activity. If you want to embed the Compose view directly within a React Native screen, you'll need to use `AndroidView` and create a custom `ViewManager` to host the Compose view.
+- Ensure your React Native and Compose dependencies are compatible.
+- For iOS, we would need to use SwiftUI or UIKit and follow a similar bridging process.
+
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
