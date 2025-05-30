@@ -33,6 +33,8 @@ This repository provides a step-by-step guide to integrating Kotlin Multiplatfor
 
 ### 1. Setting Up the Environment
 
+0. open android folder inside the android studio, you may need to /uninstall and then install pods. to insall pods go to the ios folder.
+
 1. **Initialize a React Native Project**:
    ```bash
    npx react-native init MyReactNativeApp
