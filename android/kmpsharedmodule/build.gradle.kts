@@ -30,7 +30,7 @@ kotlin {
             isStatic = false
             transitiveExport = false
         }
-        podfile = project.file("/Users/malikdawar/Desktop/MalikDawar/MD/ReactNative/AwesomeProject/ios/Podfile")
+        podfile = project.file("${project.rootDir.parent}/ios/Podfile")
         version = "1.0.0"
     }
 

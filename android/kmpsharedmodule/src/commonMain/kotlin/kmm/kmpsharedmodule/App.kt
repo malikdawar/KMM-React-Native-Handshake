@@ -48,5 +48,13 @@ fun LoginScreen() {
         ) {
             Text("Login")
         }
+
+        Button(
+            onClick = { onBtnClicked = "Login Butto2 Clicked" },
+            enabled = true,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("test ")
+        }
     }
 }
